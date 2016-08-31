@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Welcome to installation process</title>
+  </head>
+  <body>
+
+    <?php
+    if(!is_writable(dirname(__FILE__)))
+      echo "<h3>The directory's permissions (" . dirname(__FILE__) . ") must be changed to 0777 for security reasons.</h3>";
+      echo "<p>After installation we drop the install directory.</p>"
+    ?>
+
+    <div id="install">
+      <form method="post">
+        <fieldset>
+          <label for="Name">Company name: </label>
+          <input type="text" name="company" placeholder="Company name" />
+        </fieldset>
+        <fieldset>
+          <label for="Name">Username: </label>
+          <input type="text" name="username" placeholder="Username" />
+        </fieldset>
+        <fieldset>
+          <label for="Name">Password: </label>
+          <input type="password" name="password" placeholder="Password" />
+        </fieldset>
+        <fieldset>
+          <label for="Name">Password confirm: </label>
+          <input type="password" name="password_confirm" placeholder="Password confirm" />
+        </fieldset>
+        <fieldset>
+          <label for="Name">BD user: </label>
+          <input type="text" name="userdb" placeholder="BD user" />
+        </fieldset>
+        <fieldset>
+          <label for="Name">BD password: </label>
+          <input type="password" name="passbd" placeholder="BD password" />
+        </fieldset>
+        <fieldset>
+          <label for="Name">BD server: </label>
+          <input type="text" name="serverbd" placeholder="BD server" />
+        </fieldset>
+        <fieldset>
+          <label for="Name">BD name: </label>
+          <input type="text" name="namebd" placeholder="BD name" />
+        </fieldset>
+        <fieldset>
+          <input type="submit" name="_send" value="Send petition" />
+        </fieldset>
+      </form>
+    </div>
+
+    <?php
+    if(isset($_POST["_send"])){
+      $install_file = 'install_process.json';
+      $install_content = json_decode(file_get_contents($install_file), true);
+      print_r($install_content);
+    }
+    ?>
+
+  </body>
+</html>

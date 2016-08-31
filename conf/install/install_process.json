@@ -1,0 +1,10 @@
+{
+	"create_db": "CREATE DATABASE krabby",
+  "create_krabby_dates": "CREATE TABLE krabby_web_dates(org_name VARCHAR(80) NOT NULL, org_description VARCHAR(120), date_creating TIMESTAMP, PRIMARY KEY(org_name)) ENGINE = InnoDB DEFAULT CHARSET = utf8",
+  "create_user": "CREATE TABLE krabby_user (userid INT(6) AUTO_INCREMENT NOT NULL, firstname VARCHAR(30) NOT NULL, lastname VARCHAR(30) NOT NULL,country VARCHAR(30) NOT NULL, email VARCHAR(50), PRIMARY KEY(userid),reg_date TIMESTAMP) ENGINE = InnoDB DEFAULT CHARSET = utf8",
+	"create_role": "CREATE TABLE krabby_role (roleid INT(6) AUTO_INCREMENT NOT NULL,rolename VARCHAR(30) NOT NULL,PRIMARY KEY(roleid),description VARCHAR(50) NOT NULL) ENGINE = InnoDB DEFAULT CHARSET = utf8 ",
+	"create_role_permission": "CREATE TABLE krabby_permission (roleid INT(6) NOT NULL, path VARCHAR(120) NOT NULL, PRIMARY KEY(roleid, path),INDEX(roleid),CONSTRAINT FOREIGN KEY(roleid) REFERENCES krabby_role(roleid) ON DELETE CASCADE ON UPDATE CASCADE) ENGINE = InnoDB DEFAULT CHARSET = utf8 ",
+	"create_user_role": "CREATE TABLE krabby_user_role (userid INT(6) NOT NULL,roleid INT(6) NOT NULL,PRIMARY KEY(userid, roleid),INDEX(userid, roleid), CONSTRAINT FOREIGN KEY(roleid) REFERENCES krabby_role(roleid) ON DELETE CASCADE ON UPDATE CASCADE,CONSTRAINT FOREIGN KEY(userid) REFERENCES krabby_user(userid) ON DELETE CASCADE ON UPDATE CASCADE) ENGINE = InnoDB DEFAULT CHARSET = utf8 ",
+	"create_user_session": "CREATE TABLE krabby_session (apikey VARCHAR(120) NOT NULL,userid INT(6) NOT NULL,PRIMARY KEY(apikey, userid),lastconnect TIMESTAMP,INDEX(userid),CONSTRAINT FOREIGN KEY(userid) REFERENCES krabby_user(userid) ON DELETE CASCADE ON UPDATE CASCADE) ENGINE = InnoDB DEFAULT CHARSET = utf8 ",
+	"create_user_action": "CREATE TABLE krabby_user_action (userid INT(6) NOT NULL,route VARCHAR(120) NOT NULL,PRIMARY KEY(userid, route),date TIMESTAMP,INDEX(userid),CONSTRAINT FOREIGN KEY(userid) REFERENCES krabby_user(userid) ON DELETE CASCADE ON UPDATE CASCADE) ENGINE = InnoDB DEFAULT CHARSET = utf8 "
+}
