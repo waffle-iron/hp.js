@@ -5,6 +5,7 @@
     protected static $_controller;
     protected static $_request;
     private   static $module_path;
+    private   static $_model;
 
     private function __construct(){}
     abstract function index();
@@ -28,18 +29,16 @@
     protected function _viewer($elements = null){
 
       $view_path = 'modules' . DS . self::$_request["module"] . DS . 'views';
-      if(!_exists($view_path . DS . 'overall_header', "html") || !_exists($view_path . DS . 'overall_footer', "html")){
-        throw new Exception("Error: important files does not exist at view", 1);
-      }else{
-        _require($view_path . DS . 'overall_header', "html");
-        if(is_array($elements)){
-          foreach ($elements as $key => $value) {
-            _require($view_path . DS . $value, "html");
-          }
-        }
-        _require($view_path . DS . 'overall_footer', "html");
-      }
+      _require($view_path . DS . 'index', "html");
 
+    }
+
+    protected function _model(){
+      if(!isset(self::$_model)){
+        _require('core' . DS . 'model');
+        self::$_model = new model();
+      }
+      return self::$_model;
     }
 
     protected function _typreq(){

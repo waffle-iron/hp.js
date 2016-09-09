@@ -1,11 +1,11 @@
 <?php
-/**
-  * @var $_ctl -> module controller name
-  */
 
   class launcher{
 
-    public static function run($_request){
+    public static function run($_session){
+
+      $_request = request::instance()->capture();
+      print_r($_session->get_session());
 
       $_module     = $_request["module"];
       $_mod_name = 'ctl' . ucfirst($_module);
@@ -32,9 +32,7 @@
         $user_cache_file = $user_cache_dir . $user_key . '.json';
         $write = array(
             $_request["controller"] => array(
-            $_request["method"] => $response,
-            "time" => date('d/m/Y H:i:s', time()),
-            "size" => mb_strlen(json_encode($response, true), '8bit')
+            $_request["method"] => $response
           )
         );
 

@@ -2,33 +2,48 @@
 
   class session{
 
-    private function __construct(){}
-    public static function instance($newsession = null){
+    private static $instance;
 
-      session_start();
+    private function __construct(){
+
       if(!isset($_SESSION["user"])){
-
-        if(!isset($newsession)){
-          $_SESSION["user"] = array(
-            "sessionid"     => session_id(),
-            "username"      => "annon",
-            "password"      => base64_encode("password"),
-            "session_start" => null,
-            "session_time"  => date('m/d/Y H:i:s', time())
-          );
-
-        }else $_SESSION["user"] = $newsession;
-
-      }else{
-        if(isset($newsession)) $_SESSION["user"] = $newsession;
+        session_start();
+        $_SESSION["user"] = array(
+          "sessionid"     => session_id(),
+          "username"      => "annon",
+          "password"      => base64_encode("password"),
+          "session_start" => false,
+          "session_time"  => date('m/d/Y H:i:s', time())
+        );
       }
-
-      return $_SESSION["user"];
 
     }
 
-    public static function gen_user_key(){
-      $_SESSION["user"]["key"] = base64_encode($_SESSION["user"]["username"] . '-' . $_SESSION["user"]["password"]);
+    public static function instance(){
+
+      if(!isset(self::$instance)){
+        $class = __CLASS__;
+        self::$instance = new $class();
+      }
+
+      return self::$instance;
+
+    }
+
+    public function genkey(){
+      if(isset($_SESSION["user"])){
+        $_SESSION["user"]["key"] = base64_encode(
+          session_id() . ',' .
+          $_SESSION["user"]["username"] . ',' .
+          base64_encode($_SESSION["user"]["password"])
+        );
+      }else{
+        throw new Exception("Error: session does not start", 1);
+      }
+    }
+
+    public function get_session(){
+      return $_SESSION["user"];
     }
 
     public static function is_user_loggin(){

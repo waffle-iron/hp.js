@@ -1,6 +1,6 @@
 <?php
 
-  abstract class ctl{
+  class ctl implements module{
 
     protected $_module;
     protected $_controller;
@@ -36,6 +36,12 @@
 
         _write('modules' . DS . 'model.pkg.json', _compress($str));
 
+        // Check if the bd sintax is correct
+        if(!is_json(_uncompress(_gets('modules' . DS . 'model.pkg', "json")))){
+          //echo preg_replace("/(\n[\t ]*)([^\t ]+):/", "$1\"$2\":", $str);
+          throw new Exception("Error: not correct BD sintax", 1);
+        }
+
       }
 
       // Ver si el método es callable
@@ -50,10 +56,14 @@
       // Devolver datos
       return array(
         "dates" => $response,
-        "result" => ($response !== false) ? "true" : "false"
+        "result" => ($response !== false) ? "true" : "false",
+        "time" => date('d/m/Y H:i:s', time()),
+        "size" => mb_strlen(json_encode($response, true), '8bit')
       );
 
     }
+
+    public function __destruct(){}
 
   }
 
